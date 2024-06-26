@@ -1,13 +1,11 @@
 package edu.cs.utexas.HadoopEx;
 
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
-
 import java.io.IOException;
 import java.util.PriorityQueue;
 
-
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.log4j.Logger;
 
 
@@ -33,9 +31,10 @@ public class TopKMapper extends Mapper<Text, Text, Text, IntWritable> {
 			throws IOException, InterruptedException {
 
 
-		int count = Integer.parseInt(value.toString());
+		int count = Integer.parseInt(value.toString().split(",")[0]);
+		Double delay = Double.valueOf(value.toString().split(",")[1]);
 
-		pq.add(new WordAndCount(new Text(key), new IntWritable(count)) );
+		pq.add(new WordAndCount(new Text(key), delay, new IntWritable(count)));
 
 		if (pq.size() > 10) {
 			pq.poll();

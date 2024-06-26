@@ -8,10 +8,12 @@ import org.apache.hadoop.io.Text;
 public class WordAndCount implements Comparable<WordAndCount> {
 
         private final Text word;
+        private final Double delay;
         private final IntWritable count;
 
-        public WordAndCount(Text word, IntWritable count) {
+        public WordAndCount(Text word, Double delay, IntWritable count) {
             this.word = word;
+            this.delay = delay;
             this.count = count;
         }
 
@@ -22,6 +24,10 @@ public class WordAndCount implements Comparable<WordAndCount> {
         public IntWritable getCount() {
             return count;
         }
+
+        public Double getDelay() {
+            return delay;
+        }
     /**
      * Compares two sort data objects by their value.
      * @param other
@@ -30,7 +36,7 @@ public class WordAndCount implements Comparable<WordAndCount> {
         @Override
         public int compareTo(WordAndCount other) {
 
-            float diff = count.get() - other.count.get();
+            Double diff = (count.get() / delay) - (other.count.get() / other.delay);
             if (diff > 0) {
                 return 1;
             } else if (diff < 0) {
@@ -42,7 +48,7 @@ public class WordAndCount implements Comparable<WordAndCount> {
 
         public String toString(){
 
-            return "("+word.toString() +" , "+ count.toString()+")";
+            return "("+word.toString() +" , "+ count.toString()+ " , "+ delay.toString()+ ")";
         }
     }
 

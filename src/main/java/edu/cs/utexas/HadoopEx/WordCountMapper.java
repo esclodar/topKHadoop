@@ -18,8 +18,10 @@ public class WordCountMapper extends Mapper<Object, Text, Text, IntWritable> {
 			throws IOException, InterruptedException {
 		
 		StringTokenizer itr = new StringTokenizer(value.toString());
+		
 		while (itr.hasMoreTokens()) {
-			word.set(itr.nextToken());
+			String[] lineArray = itr.nextToken().split(",");
+			word.set(lineArray[7]);
 			context.write(word, counter);
 		}
 	}
