@@ -31,12 +31,11 @@ public class TopKMapper extends Mapper<Text, Text, Text, IntWritable> {
 			throws IOException, InterruptedException {
 
 
-		int count = Integer.parseInt(value.toString().split(",")[0]);
-		Double delay = Double.valueOf(value.toString().split(",")[1]);
+		int count = Integer.parseInt(value.toString());
 
-		pq.add(new WordAndCount(new Text(key), delay, new IntWritable(count)));
+		pq.add(new WordAndCount(new Text(key), new IntWritable(count)) );
 
-		if (pq.size() > 10) {
+		if (pq.size() > 3) {
 			pq.poll();
 		}
 	}

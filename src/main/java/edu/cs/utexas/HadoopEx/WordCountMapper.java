@@ -21,8 +21,16 @@ public class WordCountMapper extends Mapper<Object, Text, Text, IntWritable> {
 		
 		while (itr.hasMoreTokens()) {
 			String[] lineArray = itr.nextToken().split(",");
-			word.set(lineArray[7]);
-			context.write(word, counter);
+			try {
+				Double totalDistance = Double.valueOf(lineArray[6]);
+				if (totalDistance > 2500) {
+					word.set(lineArray[1]);
+					context.write(word, counter);
+				}
+			} catch (NumberFormatException e) {
+
+			}
+			
 		}
 	}
 }
