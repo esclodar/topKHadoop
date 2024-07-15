@@ -3,14 +3,13 @@ package edu.cs.utexas.HadoopEx;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class WordCountMapper extends Mapper<Object, Text, Text, IntWritable> {
+public class WordCountMapper extends Mapper<Object, Text, Text, Text> {
 
 	// Create a counter and initialize with 1
-	private final IntWritable counter = new IntWritable(1);
+	private Text counter = new Text();
 	// Create a hadoop text object to store words
 	private Text word = new Text();
 
@@ -22,9 +21,11 @@ public class WordCountMapper extends Mapper<Object, Text, Text, IntWritable> {
 		while (itr.hasMoreTokens()) {
 			String[] lineArray = itr.nextToken().split(",");
 			try {
-				Double totalDistance = Double.valueOf(lineArray[6]);
-				if (totalDistance > 2500) {
-					word.set(lineArray[1]);
+				int delay = Integer.parseInt(lineArray[7]);
+				int dayOfWeek = Integer.parseInt(lineArray[0]);
+				if (delay >= 0 && dayOfWeek >= 1 && dayOfWeek <= 7) {
+					word.set(String.valueOf(dayOfWeek));
+					counter.set(lineArray[1] + "," + delay);
 					context.write(word, counter);
 				}
 			} catch (NumberFormatException e) {
